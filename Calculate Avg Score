@@ -1,0 +1,123 @@
+//显示全部人员信息和打印平均分（利用2个接口）
+//一共创建五个类（包含一个接口）
+//1.test类
+package com.itheima.interface3;
+
+public class Test {
+    public static void main(String[] args) {
+        Student[] allstudents = new Student[10];
+        allstudents[0] = new Student("张烁", '男', 100);
+        allstudents[1] = new Student("李亮亮", '女', 90);
+        allstudents[2] = new Student("王五", '男', 80);
+        allstudents[3] = new Student("郝温馨", '女', 77);
+        allstudents[4] = new Student("孙七", '男', 60);
+        allstudents[5] = new Student("赵敏", '女', 50);
+        allstudents[6] = new Student("陈佳明", '男', 90);
+        allstudents[7] = new Student("小昭", '女', 30);
+        allstudents[8] = new Student("长孙无忌", '男', 80);
+        allstudents[9] = new Student("高山流水", '女', 10);
+
+        ClassDataInterface classDataInterface = new ClassDataInterfaceImplements2(allstudents);
+        classDataInterface.printAllStudentInfo();
+        classDataInterface.printAverageScore();
+    }
+}
+
+//2.student
+package com.itheima.interface3;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+
+
+public class Student {
+    private String name;
+    private char sex;
+    private double score;
+}
+
+//3.interface
+package com.itheima.interface3;
+
+public interface ClassDataInterface {
+    void printAllStudentInfo();
+    void printAverageScore();
+}
+
+//4.接口应用1
+package com.itheima.interface3;
+
+public class ClassDataInterfaceImplements1 implements ClassDataInterface{
+    private Student[] students ;
+    public ClassDataInterfaceImplements1(Student[] students) {
+        this.students = students;
+    }
+    @Override
+    public void printAllStudentInfo() {
+        System.out.println("所有学生信息如下");
+        for (int i = 0; i < students.length; i++) {
+            Student student = students[i];
+            System.out.println(student.getName() + " " + student.getSex() + " " + student.getScore());
+        }
+    }
+    @Override
+    public void printAverageScore() {
+        System.out.println("打印所有学生平均成绩");
+        double sum = 0;
+        for (int i = 0; i < students.length; i++) {
+            Student student = students[i];
+            sum += student.getScore();
+        }
+        System.out.println("全班平均成绩为: " + sum / students.length);
+    }
+}
+
+//5.接口应用2
+package com.itheima.interface3;
+
+public class ClassDataInterfaceImplements2 implements ClassDataInterface{
+    private Student[] students;
+    public ClassDataInterfaceImplements2(Student[] students) {
+        this.students = students;
+    }
+    @Override
+    public void printAllStudentInfo() {
+        System.out.println("打印所有学生信息");
+        int malecount = 0;
+        for (int i = 0; i < students.length; i++) {
+            Student student = students[i];
+            System.out.println(student.getName() + " " + student.getSex() + " " + student.getScore());
+            if (student.getSex() == '男') {
+                malecount++;
+            }
+        }
+        System.out.println("男学生人数为: " + malecount);
+        System.out.println("女学生人数为: " + (students.length - malecount));
+    }
+    @Override
+    public void printAverageScore() {
+        System.out.println("打印所有学生平均成绩");
+        Student student1 = students[0];
+        double sum = student1.getScore();
+        double max = student1.getScore();
+        double min = student1.getScore();
+        for (int i = 1; i < students.length; i++) {
+            Student student = students[i];
+            sum += student.getScore();
+            if (student.getScore() > max) {
+                max = student.getScore();
+            }
+            if (student.getScore() < min) {
+                min = student.getScore();
+            }
+        }
+        System.out.println("最高分:" + max);
+        System.out.println("最低分:" + min);
+        System.out.println("平均分:" + (sum - max - min) / (students.length - 2));
+    }
+}
